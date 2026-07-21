@@ -1,0 +1,4 @@
+package-as: WeaponTips
+
+ignore:
+    - README.md
