@@ -34,6 +34,7 @@ local dirty, suppress = true, false
 local function Rescan()
     if not nameToSubclass then BuildNameMap() end
     suppress = true
+    local toggled = false
 
     local collapsed = {}
     local i = 1
@@ -41,6 +42,7 @@ local function Rescan()
         local name, isHeader, isExpanded = GetSkillLineInfo(i)
         if isHeader and not isExpanded then
             collapsed[name] = true
+            toggled = true
             ExpandSkillHeader(i)
         end
         i = i + 1
@@ -63,7 +65,13 @@ local function Rescan()
     end
 
     dirty = false
-    C_Timer.After(0, function() suppress = false end)
+    -- Untouched headers mean no self-inflicted events: lift the
+    -- suppression immediately so no real skill-up event is ever dropped.
+    if toggled then
+        C_Timer.After(0, function() suppress = false end)
+    else
+        suppress = false
+    end
 end
 
 -- Current rank and max for a weapon subclass, or nil when the skill is
