@@ -48,6 +48,17 @@ local function AddWeaponLines(tooltip, item)
             if cityText then
                 tooltip:AddLine(string.format(L["Can be trained in: %s"], cityText),
                     1, 0.82, 0, true)
+                local cost = ns.TRAIN_COST[subClassID] or ns.TRAIN_COST_DEFAULT
+                local costText = GetCoinTextureString and GetCoinTextureString(cost)
+                    or GetMoneyString(cost)
+                local reqLevel = ns.TRAIN_LEVEL[subClassID]
+                if reqLevel then
+                    tooltip:AddLine(string.format(L["Training cost: %s (from level %d)"],
+                        costText, reqLevel), 1, 0.82, 0)
+                else
+                    tooltip:AddLine(string.format(L["Training cost: %s"], costText),
+                        1, 0.82, 0)
+                end
             end
         end
     elseif ns.db.showUnusable then

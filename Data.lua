@@ -71,6 +71,13 @@ local function cities(base, extra)
     return base
 end
 
+-- Weapon master training cost (in copper) and required character level:
+-- every skill is 10 silver with no level requirement, except polearms
+-- (1 gold, level 20). Identical on Classic and TBC.
+ns.TRAIN_COST_DEFAULT = 1000
+ns.TRAIN_COST = { [POLEARM] = 10000 }
+ns.TRAIN_LEVEL = { [POLEARM] = 20 }
+
 ns.TRAINERS = {
     [AXE1]     = { Alliance = { IF },             Horde = { OG } },
     [AXE2]     = { Alliance = { IF },             Horde = { OG } },

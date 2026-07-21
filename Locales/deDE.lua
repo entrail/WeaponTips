@@ -4,6 +4,8 @@ local L = ns.L
 
 L["You can use this weapon (%d/%d)."] = "Ihr könnt diese Waffe benutzen (%d/%d)."
 L["Can be trained in: %s"] = "Erlernbar in: %s"
+L["Training cost: %s"] = "Trainingskosten: %s"
+L["Training cost: %s (from level %d)"] = "Trainingskosten: %s (ab Stufe %d)"
 L["Requires the shaman talent 'Two-Handed Axes and Maces'."] = "Benötigt das Schamanentalent 'Zweihandäxte und -streitkolben'."
 L["Your class cannot use this type of weapon."] = "Eure Klasse kann diese Waffenart nicht benutzen."
 

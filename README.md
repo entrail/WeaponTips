@@ -11,8 +11,10 @@ the loot is a weapon type you've never held before:
   skill, shown with your current and maximum skill level.
 - <span style="color:#ffd100">**Yellow**</span> — <span style="color:#ffd100">*"Can be trained in: Ironforge, Darnassus"*</span>. Your class can
   learn this weapon type but hasn't yet — the line lists exactly the
-  cities of **your faction** whose weapon master teaches it. No more
-  guessing which capital to fly to.
+  cities of **your faction** whose weapon master teaches it, plus the
+  training cost and level requirement (polearms: 1g, from level 20 —
+  everything else 10s, no level). No more guessing which capital to
+  fly to, or when.
 - <span style="color:#ff5959">**Red**</span> — <span style="color:#ff5959">*"Your class cannot use this type of weapon."*</span> Your class can
   never learn it: need or greed with a clear conscience.
 
@@ -70,8 +72,6 @@ independently.
 - The <span style="color:#ffd100">yellow</span> line names the cities, not the exact NPC — weapon masters
   are easy to find via the city guards ("Weapon Master"). Naming the NPC
   and district is on the list.
-- Level requirements for individual weapon skills (e.g. polearms) are
-  not shown yet.
 
 Spotted a weapon type with a wrong city or class rule? Please report it
 with your class, faction and the weapon — the data tables are tiny and
