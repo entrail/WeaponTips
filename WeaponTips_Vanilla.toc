@@ -1,9 +1,9 @@
-﻿## Interface: 11508
+﻿## Interface: 11509
 ## Title: WeaponTips
 ## Notes: Weapon tooltips: green if you have the skill (with level), yellow if a weapon master can still teach it (and in which cities), red if your class can never use it.
 ## Author: Entrail09
 ## X-Curse-Project-ID: 1619194
-## Version: 1.1.1
+## Version: 1.1.2
 ## SavedVariables: WeaponTipsDB
 
 Core.lua
