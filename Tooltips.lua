@@ -35,6 +35,14 @@ local function AddWeaponLines(tooltip, item)
         end
         return
     end
+    -- Proficiency known but no skill line resolved (locale mismatch):
+    -- still green, just without the rank numbers - never a false yellow.
+    if ns.IsWeaponSkillKnown(subClassID) then
+        if ns.db.showUsable then
+            tooltip:AddLine(L["You can use this weapon."], 0.4, 0.9, 0.4)
+        end
+        return
+    end
 
     local usable = ns.CLASS_WEAPONS[ns.playerClass]
     if usable and usable[subClassID] then

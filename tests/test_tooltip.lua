@@ -40,6 +40,18 @@ test("tooltip: green line with current/max skill", function()
     assertEqual(color(lines[1]), GREEN, "green color")
 end)
 
+test("tooltip: green without rank when only IsPlayerSpell knows the skill", function()
+    local B = T.boot("Vanilla", function(m)
+        m.state.class = "WARLOCK"
+        m.state.knownSpells[201] = true -- proficiency known, no skill line match
+        m.state.items[item(SWORD1)] = { classID = 2, subClassID = SWORD1 }
+    end)
+    local lines = B.m.HoverItem(item(SWORD1))
+    assertEqual(#lines, 1, "one green line, no yellow trainer lines")
+    assertEqual(lines[1].left, "You can use this weapon.", "rankless green text")
+    assertEqual(color(lines[1]), GREEN, "green color")
+end)
+
 test("tooltip: yellow lines with faction cities and cost", function()
     local B = bootChar({})
     local lines = B.m.HoverItem(item(AXE1))

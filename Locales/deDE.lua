@@ -3,6 +3,7 @@ if GetLocale() ~= "deDE" then return end
 local L = ns.L
 
 L["You can use this weapon (%d/%d)."] = "Ihr könnt diese Waffe benutzen (%d/%d)."
+L["You can use this weapon."] = "Ihr könnt diese Waffe benutzen."
 L["Can be trained in: %s"] = "Erlernbar in: %s"
 L["Training cost: %s"] = "Trainingskosten: %s"
 L["Training cost: %s (from level %d)"] = "Trainingskosten: %s (ab Stufe %d)"

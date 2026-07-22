@@ -52,6 +52,11 @@ return function()
         skills = {},
         -- itemId -> { classID=, subClassID= }
         items = {},
+        -- spellId -> name override ("Spell<id>" otherwise); false makes
+        -- GetSpellInfo return nil, like unloaded spell data
+        spellNames = {},
+        -- spellId -> true, backing IsPlayerSpell
+        knownSpells = {},
         -- uiMapID -> localized name (nil -> C_Map returns nil, the addon
         -- falls back to the English names shipped in Data.lua)
         mapNames = {},
@@ -166,8 +171,14 @@ return function()
         end,
     }
 
-    -- deterministic fake names: proficiency spell 201 -> "Spell201"
-    M.GetSpellInfo = function(id) return "Spell" .. id, nil, "icon" .. id end
+    -- deterministic fake names: proficiency spell 201 -> "Spell201",
+    -- unless state.spellNames overrides (false -> nil, unloaded data)
+    M.GetSpellInfo = function(id)
+        local override = M.state.spellNames[id]
+        if override == false then return nil end
+        return override or ("Spell" .. id), nil, "icon" .. id
+    end
+    M.IsPlayerSpell = function(id) return M.state.knownSpells[id] == true end
     M.GetCoinTextureString = function(copper) return tostring(copper) .. "c" end
 
     -- ------------------------------------------------------ flavor

@@ -8,8 +8,10 @@ local SWORD1, SWORD2, STAFF, FIST = 7, 8, 10, 13
 local DAGGER, THROWN, CROSSBOW, WAND = 15, 16, 18, 19
 
 -- Weapon proficiency spell per subclass. Locale-safe bridge to the skill
--- window: the spell's localized name is exactly the skill line's name
--- ("Swords", "Two-Handed Swords", ...) on every client language.
+-- window: the skill line's name matches the spell's localized name -
+-- exactly for most ("Two-Handed Swords", "Daggers", ...), for the
+-- one-handed ones as a substring (skill line "Swords", spell
+-- "One-Handed Swords"); Skills.lua handles both.
 ns.PROF_SPELL = {
     [AXE1] = 196, [AXE2] = 197, [BOW] = 264, [GUN] = 266,
     [MACE1] = 198, [MACE2] = 199, [POLEARM] = 200,
@@ -17,6 +19,29 @@ ns.PROF_SPELL = {
     [FIST] = 15590, [DAGGER] = 1180, [THROWN] = 2567,
     [CROSSBOW] = 5011, [WAND] = 5009,
 }
+
+-- Skill window lines whose localized names share no substring with their
+-- proficiency spell, so neither exact nor containment matching can find
+-- them: Russian renames a few lines outright, Korean appends a "type of"
+-- suffix to most. Exact line name -> subclass, verified against wowhead
+-- classic data. Other locales resolve via the name passes in Skills.lua.
+ns.SKILL_LINE_ALIASES = ({
+    ruRU = {
+        ["Огнестрельное оружие"] = GUN,       -- spell: "Ружья"
+        ["Дробящее оружие"] = MACE1,          -- spell: "Одноручное ударное оружие"
+        ["Двуручное дробящее оружие"] = MACE2, -- spell: "Двуручное ударное оружие"
+        ["Метательное оружие"] = THROWN,      -- spell: "Бросок"
+    },
+    koKR = {
+        ["도끼류"] = AXE1, ["양손 도끼류"] = AXE2,
+        ["활류"] = BOW, ["총기류"] = GUN,
+        ["둔기류"] = MACE1, ["양손 둔기류"] = MACE2,
+        ["도검류"] = SWORD1, ["양손 도검류"] = SWORD2,
+        ["지팡이류"] = STAFF, ["단검류"] = DAGGER,
+        ["투척 무기류"] = THROWN, ["석궁류"] = CROSSBOW,
+        ["마법봉류"] = WAND,
+    },
+})[GetLocale()] or {}
 
 -- Which weapon types each class can ever learn (Classic and TBC use the
 -- same matrix; rogue axes and druid polearms only came with Cataclysm).
