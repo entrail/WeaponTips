@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.1 (2026-07-24)
+
+- Maintenance release: release notes now come from a curated changelog
+  instead of raw commit output. No in-game changes.
+
 ## v1.2.0 (2026-07-22)
 
 - Fixed known one-handed weapons showing as trainable.
