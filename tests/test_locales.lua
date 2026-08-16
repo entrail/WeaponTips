@@ -4,7 +4,7 @@
 local T = _G.WT_TEST
 local test, assertEqual, assertTrue = T.test, T.assertEqual, T.assertTrue
 
-local LOCALES = { "deDE", "frFR", "esES", "esMX", "ptBR" }
+local LOCALES = { "deDE", "frFR", "esES", "esMX", "ptBR", "ruRU" }
 
 local function bootLocale(locale)
     return T.boot("Vanilla", function(m)

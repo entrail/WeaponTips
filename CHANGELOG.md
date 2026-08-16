@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.0 (2026-08-16)
+
+- Added Russian (ruRU) translation for all tooltip lines and options.
+
 ## v1.2.1 (2026-07-24)
 
 - Maintenance release: release notes now come from a curated changelog

@@ -16,6 +16,7 @@ local FILES = {
     "Locales/frFR.lua",
     "Locales/esES.lua",
     "Locales/ptBR.lua",
+    "Locales/ruRU.lua",
     "Data.lua",
     "Skills.lua",
     "Tooltips.lua",

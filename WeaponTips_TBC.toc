@@ -3,7 +3,7 @@
 ## Notes: Weapon tooltips: green if you have the skill (with level), yellow if a weapon master can still teach it (and in which cities), red if your class can never use it.
 ## Author: Entrail09
 ## X-Curse-Project-ID: 1619194
-## Version: 1.2.1
+## Version: 1.3.0
 ## SavedVariables: WeaponTipsDB
 
 Core.lua
@@ -11,6 +11,7 @@ Locales\deDE.lua
 Locales\frFR.lua
 Locales\esES.lua
 Locales\ptBR.lua
+Locales\ruRU.lua
 Data.lua
 Skills.lua
 Tooltips.lua
