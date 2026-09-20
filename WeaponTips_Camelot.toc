@@ -1,4 +1,4 @@
-﻿## Interface: 16001, 11509, 20506
+﻿## Interface: 16001
 ## Title: WeaponTips
 ## Notes: Weapon tooltips: green if you have the skill (with level), yellow if a weapon master can still teach it (and in which cities), red if your class can never use it.
 ## Author: Entrail09

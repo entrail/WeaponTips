@@ -6,7 +6,9 @@ local L = ns.L
 
 ns.OnInit(function()
     local category, layout = Settings.RegisterVerticalLayoutCategory(ADDON_NAME)
-    category.ID = ADDON_NAME
+    -- Forever builds the category inside its secure settings delegate:
+    -- leave the generated id alone there instead of tainting it
+    if not ns.isForever then category.ID = ADDON_NAME end
     ns.settingsCategory = category
 
     layout:AddInitializer(CreateSettingsListSectionHeaderInitializer(L["Weapon Tooltips"]))
@@ -58,5 +60,6 @@ end)
 
 SLASH_WEAPONTIPS1 = "/weapontips"
 SlashCmdList.WEAPONTIPS = function()
-    Settings.OpenToCategory(ADDON_NAME)
+    local category = ns.settingsCategory
+    Settings.OpenToCategory((category and category.GetID and category:GetID()) or ADDON_NAME)
 end

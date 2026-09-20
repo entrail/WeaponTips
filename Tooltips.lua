@@ -23,7 +23,8 @@ end
 
 local function AddWeaponLines(tooltip, item)
     if not (ns.db and ns.playerClass) then return end
-    local _, _, _, _, _, classID, subClassID = GetItemInfoInstant(item)
+    if ns.api.IsSecret(item) then return end -- Forever: hidden in combat
+    local classID, subClassID = ns.api.GetItemClass(item)
     if classID ~= ITEM_CLASS_WEAPON then return end
     if not ns.PROF_SPELL[subClassID] then return end -- fishing poles etc.
 
@@ -57,8 +58,7 @@ local function AddWeaponLines(tooltip, item)
                 tooltip:AddLine(string.format(L["Can be trained in: %s"], cityText),
                     1, 0.82, 0, true)
                 local cost = ns.TRAIN_COST[subClassID] or ns.TRAIN_COST_DEFAULT
-                local costText = GetCoinTextureString and GetCoinTextureString(cost)
-                    or GetMoneyString(cost)
+                local costText = ns.api.CoinString(cost)
                 local reqLevel = ns.TRAIN_LEVEL[subClassID]
                 if reqLevel then
                     tooltip:AddLine(string.format(L["Training cost: %s (from level %d)"],
@@ -84,6 +84,7 @@ ns.OnLogin(function()
                 return
             end
             local itemID = data and data.id
+            if ns.api.IsSecret(itemID) then return end -- even `not x` throws on one
             if not itemID and TooltipUtil and TooltipUtil.GetDisplayedItem then
                 local _, link = TooltipUtil.GetDisplayedItem(tooltip)
                 if link then itemID = link end

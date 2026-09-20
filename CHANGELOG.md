@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.4.0 (2026-09-20)
+
+- Added support for WoW Forever (Interface 16001): weapon skill levels are
+  read straight from the skill line there, in every client language.
+- WoW Forever rules, taken from the beta client's data: rogues can train
+  one-handed axes, and shamans are pointed to a weapon master for
+  two-handed axes and maces (the talent no longer exists there).
+- Weapon master cities and prices on WoW Forever are the Classic ones for
+  now - the beta client does not contain trainer data. Please report any
+  weapon master that teaches something different.
+- Classic Era and TBC Anniversary behave exactly as before.
+
 ## v1.3.0 (2026-08-16)
 
 - Added Russian (ruRU) translation for all tooltip lines and options.

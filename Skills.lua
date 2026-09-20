@@ -9,22 +9,15 @@ local ADDON_NAME, ns = ...
 -- ns.SKILL_LINE_ALIASES/exact name first, then unique containment of the
 -- (case-folded) line name inside a spell name, with IsPlayerSpell
 -- breaking 1H-vs-2H ties.
+--
+-- WoW Forever has no skill window globals at all, but it can look a skill
+-- up BY ID (ns.SKILL_LINE, ns.api.GetSkillByID) - no names, no headers, no
+-- cache. It wins there; Era / TBC keep the scan they have always used.
 
-local function SpellName(spellId)
-    if GetSpellInfo then
-        return (GetSpellInfo(spellId))
-    end
-    if C_Spell and C_Spell.GetSpellName then
-        return C_Spell.GetSpellName(spellId)
-    end
-end
+local api = ns.api
+local SpellName, SpellKnown = api.GetSpellName, api.IsSpellKnown
 
--- IsSpellKnown can return false for passives like weapon proficiencies;
--- IsPlayerSpell is the reliable check, IsSpellKnown only the fallback.
-local function SpellKnown(spellId)
-    if IsPlayerSpell then return IsPlayerSpell(spellId) end
-    if IsSpellKnown then return IsSpellKnown(spellId) end
-end
+local useSkillIDs = api.HasSkillByID() and (ns.isForever or not api.HasSkillWindow())
 
 -- string.lower folds only ASCII, but skill lines capitalize letters that
 -- sit lowercase inside the spell name ("Äxte" in "Einhandäxte", "Мечи"
@@ -158,6 +151,8 @@ end
 -- not known. Rescans lazily, so mid-combat skill-ups cost nothing until
 -- the next tooltip actually asks.
 function ns.GetWeaponSkill(subclass)
+    if useSkillIDs then return api.GetSkillByID(ns.SKILL_LINE[subclass]) end
+    if not api.HasSkillWindow() then return nil end -- unknown client: no rank
     if dirty then Rescan() end
     local s = skillBySubclass[subclass]
     if s then return s.rank, s.max end
@@ -167,15 +162,17 @@ end
 -- scan could not resolve its line (a locale whose skill line name has no
 -- relation to the spell name). Rank is unavailable in that case.
 function ns.IsWeaponSkillKnown(subclass)
-    if dirty then Rescan() end
-    if skillBySubclass[subclass] then return true end
+    if ns.GetWeaponSkill(subclass) then return true end
     local spellId = ns.PROF_SPELL[subclass]
     return (spellId and SpellKnown(spellId)) or false
 end
 
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("SKILL_LINES_CHANGED")
-frame:RegisterEvent("PLAYER_LOGIN")
-frame:SetScript("OnEvent", function()
-    if not suppress then dirty = true end
-end)
+-- the by-id lookup is always live; only the scan has a cache to invalidate
+if not useSkillIDs then
+    local frame = CreateFrame("Frame")
+    frame:RegisterEvent("SKILL_LINES_CHANGED")
+    frame:RegisterEvent("PLAYER_LOGIN")
+    frame:SetScript("OnEvent", function()
+        if not suppress then dirty = true end
+    end)
+end

@@ -3,7 +3,8 @@
 -- Boots load the REAL addon files in .toc order into an isolated
 -- environment and fire ADDON_LOADED + PLAYER_LOGIN - one boot per game
 -- flavor (Vanilla/TBC differ only via WOW_PROJECT_ID: the TBC trainer
--- cities), plus per-test boots for class/faction/skill state.
+-- cities; Forever swaps the whole API shape, see m.UseForeverAPI), plus
+-- per-test boots for class/faction/skill state.
 
 local base = (arg[0] or ""):match("^(.-)tests[/\\]run%.lua$") or ""
 
@@ -12,6 +13,7 @@ local buildMocks = dofile(base .. "tests/wow_mock.lua")
 
 local FILES = {
     "Core.lua",
+    "Compat.lua",
     "Locales/deDE.lua",
     "Locales/frFR.lua",
     "Locales/esES.lua",
@@ -23,11 +25,12 @@ local FILES = {
     "Options.lua",
 }
 
--- boot("Vanilla"|"TBC", setup?) -> { ns, m, env }; setup(m) runs before
+-- boot("Vanilla"|"TBC"|"Forever", setup?) -> { ns, m, env }; setup(m) runs before
 -- the files load, so tests can shape class/faction/skills/items first.
 local function boot(flavor, setup)
     local m = buildMocks()
     m.WOW_PROJECT_ID = (flavor == "TBC") and 5 or 2
+    if flavor == "Forever" then m.UseForeverAPI() end
     local ns = {}
     local env = Loader.newEnv(m)
     if setup then setup(m) end
@@ -59,6 +62,7 @@ local SUITE_FILES = {
     "test_skills.lua",
     "test_tooltip.lua",
     "test_locales.lua",
+    "test_forever.lua",
 }
 for _, s in ipairs(SUITE_FILES) do
     currentSuite = s

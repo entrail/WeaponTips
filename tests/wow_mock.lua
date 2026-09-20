@@ -225,5 +225,56 @@ return function()
     }
     M.CreateSettingsListSectionHeaderInitializer = function() return {} end
 
+    -- ------------------------------------------------------ WoW Forever
+    -- Call from a boot setup() to turn this mock into the Forever client
+    -- (Retail 12.x engine, Interface 16001; shape taken from Blizzard's
+    -- `forever` UI source + the in-game probe of 2026-09-18): the classic
+    -- spell / item / skill-window / coin globals are GONE, their C_ twins
+    -- return tables, and skills are looked up BY ID.
+    --   state.skillsByID[skillLineID] = { rank =, max = }  (learned skills)
+    function M.UseForeverAPI()
+        local legacyInstant = M.GetItemInfoInstant
+        for _, gone in ipairs({ "GetSpellInfo", "IsPlayerSpell", "GetItemInfoInstant",
+            "GetNumSkillLines", "GetSkillLineInfo", "ExpandSkillHeader",
+            "CollapseSkillHeader", "GetCoinTextureString" }) do
+            M[gone] = nil
+        end
+        M.WOW_PROJECT_MAINLINE = 1
+        M.WOW_PROJECT_ID = 1
+        M.state.skillsByID = M.state.skillsByID or {}
+        M.Enum.SpellBookSpellBank = { Player = 0, Pet = 1 }
+        M.issecretvalue = function(v) return type(v) == "table" and rawget(v, "__secret") == true end
+        M.SECRET = setmetatable({ __secret = true }, {
+            __eq = function() error("attempt to compare a secret value", 2) end,
+        })
+        M.C_Spell = {
+            GetSpellName = function(id)
+                local override = M.state.spellNames[id]
+                if override == false then return nil end
+                return override or ("Spell" .. id)
+            end,
+        }
+        M.C_SpellBook = {
+            IsSpellKnown = function(id, bank)
+                assert(bank == 0, "spell bank enum expected, got " .. tostring(bank))
+                return M.state.knownSpells[id] == true
+            end,
+        }
+        M.C_Item = { GetItemInfoInstant = legacyInstant }
+        M.C_SkillInfo = {
+            -- nil for a skill the character does not have
+            GetSkillLineInfoByID = function(skillID)
+                M.__skillLookups = (M.__skillLookups or 0) + 1
+                local s = M.state.skillsByID[skillID]
+                if not s then return nil end
+                return { skillID = skillID, name = "Skill" .. skillID, isHeader = false,
+                    rank = s.rank, maxRank = s.max, modifier = 0 }
+            end,
+        }
+        M.C_CurrencyInfo = {
+            GetCoinTextureString = function(copper) return tostring(copper) .. "c" end,
+        }
+    end
+
     return M
 end

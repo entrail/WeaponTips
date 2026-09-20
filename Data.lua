@@ -20,6 +20,17 @@ ns.PROF_SPELL = {
     [CROSSBOW] = 5011, [WAND] = 5009,
 }
 
+-- Skill line id per subclass (SkillLine.db2, identical on Era, TBC and
+-- Forever). Only Forever can look a skill up by id - the classic skill
+-- window API knows nothing but localized names - see Skills.lua.
+ns.SKILL_LINE = {
+    [AXE1] = 44, [AXE2] = 172, [BOW] = 45, [GUN] = 46,
+    [MACE1] = 54, [MACE2] = 160, [POLEARM] = 229,
+    [SWORD1] = 43, [SWORD2] = 55, [STAFF] = 136,
+    [FIST] = 473, [DAGGER] = 173, [THROWN] = 176,
+    [CROSSBOW] = 226, [WAND] = 228,
+}
+
 -- Skill window lines whose localized names share no substring with their
 -- proficiency spell, so neither exact nor containment matching can find
 -- them: Russian renames a few lines outright, Korean appends a "type of"
@@ -70,6 +81,23 @@ ns.CLASS_WEAPONS = {
 ns.TALENT_WEAPONS = {
     SHAMAN = set(AXE2, MACE2),
 }
+
+-- WoW Forever rule changes (SkillRaceClassInfo of build 1.60.1.69913
+-- diffed against Era):
+--   * rogues can learn one-handed axes
+--   * the shaman talent 'Two-Handed Axes and Maces' left the talent trees
+--     and the two skills turned from talent-granted into ordinary learnable
+--     ones, like everybody else's -> they get the weapon master cities
+-- Druid polearms stay red: the client table allows them on Era as well
+-- (Season of Discovery rows), so it proves nothing for Forever. A druid
+-- who does learn them gets the green line regardless.
+-- Weapon master cities and prices are server-side trainer data, invisible
+-- to the client DB: Forever reuses the Era values below until an in-game
+-- check says otherwise (the polearm level 20 IS in the client table).
+if ns.isForever then
+    ns.CLASS_WEAPONS.ROGUE[AXE1] = true
+    ns.TALENT_WEAPONS = {}
+end
 
 -- Cities with a weapon master, as uiMapIDs so C_Map.GetMapInfo returns
 -- the localized city name; the English name is only a fallback.
